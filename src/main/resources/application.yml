@@ -1,0 +1,44 @@
+server:
+  port: ${PORT:80}
+  https: ${SSL_SERVER:false}
+  compression:
+    enabled: true
+  cors:
+    origins: ${CORS_ORIGINS:*}
+app:
+  version:
+    commit: ${COMMIT:0}
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  # DATABASE
+  datasource: # docker run -it --rm --name postgres -p 5432:5432 -e POSTGRES_DB=quizz -e POSTGRES_PASSWORD=quizz postgres
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${PG_HOST:localhost}:${PG_PORT:5432}/${PG_DATABASE:postgres}
+    username: ${PG_LOGIN:postgres}
+    password: ${PG_PASS:postgres}
+  # JPA / HIBERNATE
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+      id:
+        new_generator_mappings: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+        temp:
+          use_jdbc_metadata_defaults: false
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  # Flyway
+  flyway:
+    locations: classpath:db
+    baseline-on-migrate: true
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
