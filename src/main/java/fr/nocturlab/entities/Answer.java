@@ -24,9 +24,16 @@ public class Answer {
     @ManyToOne
 	@JoinColumn(name="question")
     private Question question;
-    @ManyToOne
-	@JoinColumn(name="answer")
-    private Answer answer;
+    private String answer;
     @Column(name = "creation_date", insertable = false, updatable = false)
     private LocalDateTime creationDate;
+
+    public Answer() {
+        this.creationDate = LocalDateTime.now();
+    }
+    public Answer(Question question, String answer) {
+        this();
+        this.question = question;
+        this.answer = answer;
+    }
 }
