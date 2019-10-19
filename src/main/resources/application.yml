@@ -22,6 +22,7 @@ spring:
   # JPA / HIBERNATE
   jpa:
     show-sql: false
+    generate-ddl: true
     hibernate:
       ddl-auto: update
       id:
@@ -35,10 +36,6 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
-  # Flyway
-  flyway:
-    locations: classpath:db
-    baseline-on-migrate: true
   jackson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
