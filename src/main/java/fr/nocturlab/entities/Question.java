@@ -45,17 +45,21 @@ public class Question {
 		this.validAnswer = new ArrayList<>();
 		this.creationDate = LocalDateTime.now();
 	}
-
-	public Question(String value, List<Answer> answers, List<Answer> validAnswer){
+	private Question(String value, List<Answer> answers){
 		this();
 		this.value = value;
 		this.answers = answers;
+		this.answers.forEach((Answer answer)->{
+			answer.setQuestion(this);
+		});
+	}
+	public Question(String value, List<Answer> answers, List<Answer> validAnswer){
+		this(value, answers);
 		this.validAnswer = validAnswer;
+
 	}
 	public Question(String value, List<Answer> answers, Answer validAnswer){
-		this();
-		this.value = value;
-		this.answers = answers;
+		this(value, answers);
 		this.validAnswer.add(validAnswer);
 	}
 

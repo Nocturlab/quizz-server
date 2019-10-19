@@ -31,9 +31,8 @@ public class Answer {
     public Answer() {
         this.creationDate = LocalDateTime.now();
     }
-    public Answer(Question question, String answer) {
+    public Answer(String answer) {
         this();
-        this.question = question;
         this.answer = answer;
     }
 }
