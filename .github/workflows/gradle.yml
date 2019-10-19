@@ -38,7 +38,7 @@ jobs:
       with:
         args: --user ${{ secrets.SSH_USER }} --script "'docker stack rm quizz'" --script "'docker pull nocturlab/quizz'" --script "'docker stack deploy -c ${{ secrets.STACK_DIR }} quizz'"
     - name: Publish on beta server
-      if: github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/beta'
       uses: appleboy/ssh-action@v0.0.2
       env:
         HOST: ${{ secrets.SSH_HOST }}
