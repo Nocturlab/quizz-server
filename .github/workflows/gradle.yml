@@ -22,7 +22,6 @@ jobs:
       run: ./gradlew test
       continue-on-error: true # Allow tests to fail (will be removed when test will be correctly implemented)
     - name: Publish to Docker
-      if:  matrix.os == 'ubuntu-latest'
       uses: elgohr/Publish-Docker-Github-Action@1.12
       with:
         name: nocturlab/archi-data
