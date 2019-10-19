@@ -2,7 +2,6 @@ package fr.nocturlab.web;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.Security;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +24,7 @@ import fr.nocturlab.entities.Account;
 import fr.nocturlab.entities.Answer;
 import fr.nocturlab.entities.Question;
 import fr.nocturlab.entities.Resultat;
+import fr.nocturlab.exception.NotFoundException;
 import fr.nocturlab.manager.AccountManager;
 import fr.nocturlab.repository.AccountRepository;
 import fr.nocturlab.repository.QuestionRepository;
@@ -74,7 +74,8 @@ public class ApiHandler {
 
 	@RequestMapping(value = { "/questions/{questionId}" }, method = RequestMethod.GET)
 	public ResponseEntity<?> getQuestion(@RequestHeader(name = "Auth", required = false) String auth,
-			HttpServletRequest request, @PathVariable(name = "questionId", required = true) int questionId) {
+			HttpServletRequest request, @PathVariable(name = "questionId", required = true) int questionId)
+			throws NotFoundException {
 		String[] identifiants = accountManager.parseAuth(auth);
 		if (identifiants.length == 0)
 			return ResponseEntity.badRequest().build();
@@ -82,7 +83,7 @@ public class ApiHandler {
 		if (a == null)
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-		Question question = questionRepository.getOne(questionId);
+		Question question = questionRepository.findById(questionId).orElseThrow(()->new NotFoundException("Question with id: "+questionId+ " doesn't exist."));
 
 		return ResponseEntity.ok(question);
 	}
@@ -107,7 +108,7 @@ public class ApiHandler {
 			HttpServletRequest request, 
 			@PathVariable(name = "questionId", required = true) int questionId,
 			@RequestBody Map<String, Object> data
-	) {
+	) throws NotFoundException {
 		String[] identifiants = accountManager.parseAuth(auth);
 		if(identifiants.length == 0)
 			return ResponseEntity.badRequest().build();
@@ -115,7 +116,7 @@ public class ApiHandler {
 		if (a == null) 
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-		Question question = questionRepository.getOne(questionId);
+		Question question = questionRepository.findById(questionId).orElseThrow(()->new NotFoundException("Question with id: "+questionId+ " doesn't exist."));
 		
 		Answer answer = mappingUtil.create(Answer.class, data);
 		
@@ -135,7 +136,7 @@ public class ApiHandler {
 	public ResponseEntity<?> getResultat(@RequestHeader(name = "Auth", required = false) String auth,
 			HttpServletRequest request, 
 			@PathVariable(name = "questionId", required = true) int questionId
-	) {
+	) throws NotFoundException {
 		String[] identifiants = accountManager.parseAuth(auth);
 		if(identifiants.length == 0)
 			return ResponseEntity.badRequest().build();
@@ -143,9 +144,9 @@ public class ApiHandler {
 		if (a == null)
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-		Question question = questionRepository.getOne(questionId);
+		Question question = questionRepository.findById(questionId).orElseThrow(()->new NotFoundException("Question with id: "+questionId+ " doesn't exist."));
 		
-		Resultat resultat = resultatRepository.findByAccountAndQuestion(a, question);
+		Resultat resultat = resultatRepository.findByAccountAndQuestion(a, question).orElseThrow(()->new NotFoundException("Resultat with account: "+a.getId()+ "and account: "+question.getId()+ " doesn't exist."));
 
 		return ResponseEntity.ok(resultat);
 	}
@@ -154,7 +155,7 @@ public class ApiHandler {
 	public ResponseEntity<?> getResultats(@RequestHeader(name = "Auth", required = false) String auth,
 			HttpServletRequest request,
 			@PathVariable(name = "questionId", required = true) int questionId
-	) {
+	) throws NotFoundException {
 		String[] identifiants = accountManager.parseAuth(auth);
 		if(identifiants.length == 0)
 			return ResponseEntity.badRequest().build();
@@ -162,9 +163,9 @@ public class ApiHandler {
 		if (a == null)
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-		Question question = questionRepository.getOne(questionId);
+		Question question = questionRepository.findById(questionId).orElseThrow(()->new NotFoundException("Question with id: "+questionId+ " doesn't exist."));
 		
-		Resultat resultat = resultatRepository.findByAccountAndQuestion(a, question);
+		Resultat resultat = resultatRepository.findByAccountAndQuestion(a, question).orElseThrow(()->new NotFoundException("Resultat with account: "+a.getId()+ "and account: "+question.getId()+ " doesn't exist."));
 
 		return ResponseEntity.ok(resultat);
 	}

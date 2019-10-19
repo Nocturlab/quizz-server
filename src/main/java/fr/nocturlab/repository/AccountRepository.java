@@ -1,9 +1,11 @@
 package fr.nocturlab.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import fr.nocturlab.entities.Account;
 
-public interface AccountRepository extends JpaRepository<Account, Integer> {
+@Repository
+public interface AccountRepository extends CrudRepository<Account, Integer> {
 	Account getByPseudoAndPass(String pseudo, byte[] password);
 }
