@@ -53,19 +53,34 @@ public class Question {
 			answer.setQuestion(this);
 		});
 	}
-	public Question(String value, List<Answer> answers, List<Answer> validAnswer){
+	public Question(String value, List<Answer> answers, List<Integer> validAnswer){
 		this(value, answers);
-		this.validAnswer = validAnswer;
+		validAnswer.forEach((Integer answer)->{
+			this.validAnswer.add(this.answers.get(answer));
+		});
 
 	}
-	public Question(String value, List<Answer> answers, Answer validAnswer){
+	public Question(String value, List<Answer> answers, Integer validAnswer){
 		this(value, answers);
-		this.validAnswer.add(validAnswer);
+		this.validAnswer.add(this.answers.get(validAnswer));
 	}
 
-	public Question(String value, List<Answer> answers, Answer validAnswer, Category categ){
+	public Question(String value, List<Answer> answers, List<Integer> validAnswer, Category categ){
 		this(value, answers, validAnswer);
 		categ.addQuestions(this);
+	}
+	public Question(String value, List<Answer> answers, Integer validAnswer, Category categ){
+		this(value, answers, validAnswer);
+		categ.addQuestions(this);
+	}
+	
+	public Question(String value, List<Answer> answers, List<Integer> validAnswer, Category categ, Resource resource){
+		this(value, answers, validAnswer, categ);
+		this.resource = resource;
+	}
+	public Question(String value, List<Answer> answers, Integer validAnswer, Category categ, Resource resource){
+		this(value, answers, validAnswer, categ);
+		this.resource = resource;
 	}
 
 	@Transient

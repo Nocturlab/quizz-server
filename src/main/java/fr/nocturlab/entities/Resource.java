@@ -21,11 +21,11 @@ public class Resource {
 	@Column(insertable = false, updatable = false)
 	private Integer id;
 	@NotNull private String name;
+	@ManyToOne
+	@NotNull private TypeResource type;
 	private String content;
 	private String summary;
 	private String author;
-	@ManyToOne
-	@NotNull private Resource resource;
 	@Column(name = "creation_date", insertable = false, updatable = false)
 	private LocalDateTime creationDate;
 
@@ -35,16 +35,17 @@ public class Resource {
 		this();
 		this.name = name;
 	}
-	public Resource(String name, String author){
+	public Resource(String name, String author, TypeResource type){
 		this(name);
 		this.author = author;
+		this.type = type;
 	}
-	public Resource(String name, String author, String content){
-		this(name, author);
-		this.content = content;
-	}
-	public Resource(String name, String author, String content, String summary){
-		this(name, author, content);
+	public Resource(String name, String author, TypeResource type, String summary){
+		this(name, author, type);
 		this.summary = summary;
+	}
+	public Resource(String name, String author, TypeResource type, String summary, String content){
+		this(name, author, type, summary);
+		this.content = content;
 	}
 }

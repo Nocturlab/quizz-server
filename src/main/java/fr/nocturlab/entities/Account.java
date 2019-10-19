@@ -73,8 +73,4 @@ public class Account {
 	public void decDifficulty(Float questionDifficulty){
 		this.difficulty-=(questionDifficulty)*0.1f;
 	}
-	@Transient
-	public Float getDifficulty() {
-		return null;
-	}
 }
