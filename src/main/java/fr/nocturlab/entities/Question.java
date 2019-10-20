@@ -33,6 +33,8 @@ public class Question {
 	private List<Answer> answers;
 	@ManyToOne
 	private Resource resource;
+	@ManyToOne
+	private Category category;
 	@ManyToMany
 	@JsonIgnore
 	@NotNull private List<Answer> validAnswer;
@@ -49,9 +51,6 @@ public class Question {
 		this();
 		this.value = value;
 		this.answers = answers;
-		this.answers.forEach((Answer answer)->{
-			answer.setQuestion(this);
-		});
 	}
 	public Question(String value, List<Answer> answers, List<Integer> validAnswer){
 		this(value, answers);
@@ -67,6 +66,7 @@ public class Question {
 
 	public Question(String value, List<Answer> answers, List<Integer> validAnswer, Category categ){
 		this(value, answers, validAnswer);
+		this.category = categ;
 		categ.addQuestions(this);
 	}
 	public Question(String value, List<Answer> answers, Integer validAnswer, Category categ){
@@ -91,4 +91,21 @@ public class Question {
 	public void decDifficulty(Float accountDifficulty){
 		this.difficulty-=(accountDifficulty)*0.1f;
 	}
+    @Transient
+	public boolean isCorrect(List<Answer> answers) {
+		boolean res = answers.size() == this.answers.size();
+		if(res)
+			for (Answer answer : this.answers) {
+				if(!answers.contains(answer))
+					res = false;
+			}
+		return res;
+	}
+
+	@Transient
+	@Override
+	public String toString() {
+		return this.value;
+	}
+	
 }

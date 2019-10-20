@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
@@ -47,5 +48,11 @@ public class Resource {
 	public Resource(String name, String author, TypeResource type, String summary, String content){
 		this(name, author, type, summary);
 		this.content = content;
+	}
+
+	@Transient
+	@Override
+	public String toString() {
+		return this.name;
 	}
 }

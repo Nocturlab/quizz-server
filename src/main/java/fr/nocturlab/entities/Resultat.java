@@ -8,8 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,28 +25,32 @@ public class Resultat {
 	@Column(insertable = false, updatable = false)
     private Integer id;
     @ManyToOne
-	@JoinColumn(name="account")
     private Account account;
     @ManyToOne
-	@JoinColumn(name="question")
     private Question question;
-    @ManyToOne
-	@JoinColumn(name="answer")
-    private List<Answer> answer;
+    @OneToMany
+    @JoinTable(name = "resultat_answer")
+    private List<Answer> answers;
     @Column(name = "creation_date", insertable = false, updatable = false)
     private LocalDateTime creationDate;
     @Column(name = "duration", updatable = false)
-    private Long duration;
+    private Integer duration;
 
 	public Resultat(){
         this.creationDate = LocalDateTime.now();
     }
 
-	public Resultat(Account account, Question question, List<Answer> answer, Long duration){
+	public Resultat(Account account, Question question, List<Answer> answers, Integer duration){
 		this();
         this.account = account;
         this.question = question;
-        this.answer = answer;
+        this.answers = answers;
         this.duration = duration;
+    }
+    
+    @Transient
+	@Override
+	public String toString() {
+		return "Account "+this.account +" has found "+ (this.getQuestion().isCorrect(this.answers)?"correct":"incorrect") +" answer in "+ this.duration +" seconds for question : "+ this.question;
 	}
 }
