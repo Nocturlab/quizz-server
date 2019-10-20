@@ -13,9 +13,6 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import fr.nocturlab.manager.AccountManager;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,9 +20,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Account {
-
-	@Autowired
-	AccountManager accountManager;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +40,6 @@ public class Account {
 	public Account(){
 		this.difficulty = 1f;
 		this.token = UUID.randomUUID();
-		this.pass = accountManager.encryptPassword(accountManager.generatePassword());
 		this.creationDate = LocalDateTime.now();
 	}
 	public Account(String pseudo) {
@@ -72,5 +65,11 @@ public class Account {
 	@Transient
 	public void decDifficulty(Float questionDifficulty){
 		this.difficulty-=(questionDifficulty)*0.1f;
+	}
+
+	@Transient
+	@Override
+	public String toString() {
+		return this.pseudo;
 	}
 }

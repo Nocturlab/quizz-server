@@ -25,7 +25,7 @@ public class Category {
 	private Integer id;
 	@NotNull private String name;
 	private String description;
-	@OneToMany
+	@OneToMany(mappedBy = "category")
 	private List<Question> questions;
 	@Column(name = "creation_date", insertable = false, updatable = false)
 	private LocalDateTime creationDate;
@@ -49,5 +49,11 @@ public class Category {
 	public Category addQuestions(Question question) {
 		this.questions.add(question);
 		return this;
+	}
+
+	@Transient
+	@Override
+	public String toString() {
+		return this.name;
 	}
 }

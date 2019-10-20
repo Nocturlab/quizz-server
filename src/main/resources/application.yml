@@ -16,9 +16,9 @@ spring:
   # DATABASE
   datasource: # docker run -it --rm --name postgres -p 5432:5432 -e POSTGRES_DB=quizz -e POSTGRES_PASSWORD=quizz postgres
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${PG_HOST:localhost}:${PG_PORT:5432}/${PG_DATABASE:postgres}
-    username: ${PG_LOGIN:postgres}
-    password: ${PG_PASS:postgres}
+    url: jdbc:postgresql://${PG_HOST:db.nocturlab.fr}:${PG_PORT:5432}/${PG_DATABASE:quizz}
+    username: ${PG_LOGIN:quizz}
+    password: ${PG_PASS:wQ9b0cIsls65}
   # JPA / HIBERNATE
   jpa:
     show-sql: false

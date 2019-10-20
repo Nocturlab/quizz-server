@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
@@ -28,5 +29,11 @@ public class TypeResource {
 	public TypeResource(String name){
 		this();
 		this.name = name;
+	}
+
+	@Transient
+	@Override
+	public String toString() {
+		return this.name;
 	}
 }
