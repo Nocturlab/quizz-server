@@ -25,16 +25,18 @@ public class Account {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(insertable = false, updatable = false)
 	private Integer id;
+	@Column(unique = true)
 	private String pseudo;
+	@Column(unique = true)
 	private String email;
 	private Float difficulty;
-	@Column(insertable = false, updatable = false)
+	@Column(insertable = false, unique = true)
 	@JsonIgnore
 	private UUID token;
 	@JsonIgnore
 	private byte[] pass;
 	@NotNull private boolean isAdmin;
-	@Column(name = "creation_date", insertable = false, updatable = false)
+	@Column(name = "creation_date", updatable = false)
 	private LocalDateTime creationDate;
 
 	public Account(){

@@ -20,8 +20,9 @@ public class TypeResource {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(insertable = false, updatable = false)
 	private Integer id;
+	@Column(unique = true)
 	@NotNull private String name;
-	@Column(name = "creation_date", insertable = false, updatable = false)
+	@Column(name = "creation_date", updatable = false)
 	private LocalDateTime creationDate;
 
 	public TypeResource(){}

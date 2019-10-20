@@ -7,7 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import fr.nocturlab.entities.Account;
-import fr.nocturlab.entities.Answer;
 import fr.nocturlab.entities.Question;
 
 @Repository
