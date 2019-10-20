@@ -2,8 +2,8 @@ package fr.nocturlab.web;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,6 +27,7 @@ import fr.nocturlab.entities.Resultat;
 import fr.nocturlab.exception.NotFoundException;
 import fr.nocturlab.manager.AccountManager;
 import fr.nocturlab.repository.AccountRepository;
+import fr.nocturlab.repository.AnswerRepository;
 import fr.nocturlab.repository.QuestionRepository;
 import fr.nocturlab.repository.ResultatRepository;
 import fr.nocturlab.utils.MappingUtil;
@@ -42,6 +43,8 @@ public class ApiHandler {
 	private AccountManager accountManager;
 	@Autowired
 	private AccountRepository accountRepository;
+	@Autowired
+	private AnswerRepository answerRepository;
 
 	@Value("${server.https}")
 	public boolean https;
@@ -107,7 +110,7 @@ public class ApiHandler {
 	public ResponseEntity<?> postAnswer(@RequestHeader(name = "Auth", required = false) String auth,
 			HttpServletRequest request, 
 			@PathVariable(name = "questionId", required = true) int questionId,
-			@RequestBody Map<String, Object> data
+			@RequestBody List<Integer> data
 	) throws NotFoundException {
 		String[] identifiants = accountManager.parseAuth(auth);
 		if(identifiants.length == 0)
@@ -115,12 +118,23 @@ public class ApiHandler {
 		Account a = accountManager.login(identifiants[0], identifiants[1]);
 		if (a == null) 
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
+		
+		ArrayList<Answer> answers = new ArrayList<>();
+		boolean isFirst = true;
+		int duration = -1;
+		for (Integer answer : data) {
+			if(isFirst){ // first is duration in second
+				isFirst = false;
+				duration = answer;
+			}else
+				answers.add(answerRepository.findById(answer).orElseThrow(()->new NotFoundException("Answer with id: "+answer+ " doesn't exist.")));
+		}
 		Question question = questionRepository.findById(questionId).orElseThrow(()->new NotFoundException("Question with id: "+questionId+ " doesn't exist."));
 		
-		Answer answer = mappingUtil.create(Answer.class, data);
-		
-		boolean isCorrect = questionRepository.validate(question, answer);
+		Resultat resultat = new Resultat(a, question, answers, duration);
+		resultatRepository.save(resultat);
+
+		boolean isCorrect = question.isCorrect(answers);
 		if(isCorrect){
 			a.incDifficulty(question.getDifficulty());
 			question.incDifficulty(a.getDifficulty());

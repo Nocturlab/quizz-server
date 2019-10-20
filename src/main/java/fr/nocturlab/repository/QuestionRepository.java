@@ -12,14 +12,9 @@ import fr.nocturlab.entities.Question;
 
 @Repository
 public interface QuestionRepository extends CrudRepository<Question, Integer> {
-    @Query(value = "SELECT count(*) FROM question q WHERE q not in (SELECT FROM resultat r WHERE r.account == $1)", nativeQuery = false)
+    @Query(value = "SELECT count(*) FROM question q WHERE q.id not in (SELECT distinct r.question_id FROM resultat r WHERE r.account_id == $1)", nativeQuery = true)
     Integer countByNotAlreadyAnswer(Account account);
 
-    @Query(value = "SELECT * FROM question q WHERE q not in (SELECT id FROM resultat r WHERE r.account == $1)", nativeQuery = false)
+    @Query(value = "SELECT * FROM question q WHERE q.id not in (SELECT distinct r.question_id FROM resultat r WHERE r.account_id == $1)", nativeQuery = true)
     List<Question> findByNotAlreadyAnswer(Account account);
-
-    boolean existsByIdAndValidAnswer(Integer id, Answer answer);
-    default boolean validate(Question question, Answer answer){
-        return existsByIdAndValidAnswer(question.getId(), answer);
-    }
 }
