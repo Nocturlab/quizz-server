@@ -4,6 +4,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,11 +34,14 @@ import fr.nocturlab.repository.ResultatRepository;
 import fr.nocturlab.utils.MappingUtil;
 
 @Controller
-@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = {"api/v2"})
 public class ApiHandler {
 
 	@Autowired
 	public Environment env;
+	
+	@Autowired
+	public MappingUtil mapping;
 
 	@Autowired
 	private AccountManager accountManager;
@@ -52,8 +56,8 @@ public class ApiHandler {
 	@RequestMapping(value = { "/login" }, method = RequestMethod.POST)
 	public ResponseEntity<Account> login(@RequestHeader(name = "Auth", defaultValue = "") String auth) {
 		String[] identifiants = accountManager.parseAuth(auth);
-		if (identifiants.length == 0)
-			return ResponseEntity.badRequest().build();
+		if (identifiants.length != 2)
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		// Pseudo Password
 		Account a = accountManager.login(identifiants[0], identifiants[1]);
 		if (a == null)
@@ -62,7 +66,9 @@ public class ApiHandler {
 	}
 
 	@RequestMapping(value = { "/signin" }, method = RequestMethod.POST)
-	public ResponseEntity<Account> initAccounts(@RequestBody Account account, HttpServletRequest request) {
+	public ResponseEntity<Account> initAccounts(@RequestBody Map<String, Object> params, HttpServletRequest request) {
+		Account account = mapping.create(Account.class, params);
+		account.setPass(accountManager.encryptPassword((String)params.get("pass")));
 		Account a = accountRepository.save(account);
 
 		return ResponseEntity.ok(a);
