@@ -36,7 +36,7 @@ public class Question {
 	@ManyToOne
 	private Resource resource;
 	@ManyToOne
-	private Category category;
+	@NotNull private Category category;
 	@ManyToMany
 	@JsonIgnore
 	@NotNull private List<Answer> validAnswer;
