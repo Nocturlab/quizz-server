@@ -30,7 +30,7 @@ public class Account {
 	@Column(unique = true)
 	private String email;
 	private Float difficulty;
-	@Column(insertable = false, unique = true)
+	@Column(unique = true)
 	@JsonIgnore
 	private UUID token;
 	@JsonIgnore
