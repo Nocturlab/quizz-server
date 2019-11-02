@@ -71,6 +71,7 @@ public class Question {
 	}
 	public Question(String value, Iterable<Answer> answers, Integer validAnswer, Category categ){
 		this(value, answers, validAnswer);
+		this.category = categ;
 	}
 	
 	public Question(String value, Iterable<Answer> answers, List<Integer> validAnswer, Category categ, Resource resource){

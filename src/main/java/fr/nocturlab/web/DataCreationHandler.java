@@ -47,7 +47,7 @@ public class DataCreationHandler {
 		List<Category> categs = new ArrayList<Category>() {{
 			add(new Category("Qui travaille avec qui ?"));
 			add(new Category("Qui a écrit l'article ?"));
-			add(new Category("Qui travaille sur ce projet?"));
+			add(new Category("Qui travaille sur ce projet ?"));
 			add(new Category("Qui a fait quoi ?"));
 		}};
 		categoryRepository.saveAll(categs);
@@ -90,7 +90,7 @@ public class DataCreationHandler {
 					add(new Answer("Damien Mondou"));
 				}}),
 				5,
-				categoryRepository.findByName("Qui travaille sur ce projet?").orElseThrow(()->new NotFoundException("Category with name 'Qui travaille sur ce projet ?' doesn't exist.")),
+				categoryRepository.findByName("Qui travaille sur ce projet ?").orElseThrow(()->new NotFoundException("Category with name 'Qui travaille sur ce projet ?' doesn't exist.")),
 				resourceRepository.save(new Resource("Librairie de manipulation des treillis", 
 					"Karell Bertet",
 					typeResourceRepository.findByName("Librairie").orElseThrow(()->new NotFoundException("TypeResource with name 'Librairie' doesn't exist.")),
