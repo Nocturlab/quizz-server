@@ -42,7 +42,7 @@ public class AccountManager {
 		return resultatRepository.findByAccount(account);
 	}
 
-	public byte[] encryptPassword(String value) {
+	public static byte[] encryptPassword(String value) {
 		byte[] ret;
 		try {
 			// génération de la clé secrète pour HMAC

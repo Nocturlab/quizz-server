@@ -60,6 +60,7 @@ public class ApiHandler {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		// Pseudo Password
 		Account a = accountManager.login(identifiants[0], identifiants[1]);
+		
 		if (a == null)
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		return ResponseEntity.ok(a);
@@ -68,7 +69,7 @@ public class ApiHandler {
 	@RequestMapping(value = { "/signin" }, method = RequestMethod.POST)
 	public ResponseEntity<Account> initAccounts(@RequestBody Map<String, Object> params, HttpServletRequest request) {
 		Account account = mapping.create(Account.class, params);
-		account.setPass(accountManager.encryptPassword((String)params.get("pass")));
+		account.setPass(AccountManager.encryptPassword((String)params.get("pass")));
 		Account a = accountRepository.save(account);
 
 		return ResponseEntity.ok(a);

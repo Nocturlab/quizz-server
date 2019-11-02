@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import fr.nocturlab.manager.AccountManager;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -60,6 +61,15 @@ public class Account {
 		this(pseudo, email, pass);
 		this.isAdmin = isAdmin;
 	}
+	
+	public void setPass(byte[] pass){
+		this.pass = pass;
+	}
+
+	public void setPass(String pass) {
+		this.pass = AccountManager.encryptPassword(pass);
+	}
+
 	@Transient
 	public void incDifficulty(Float questionDifficulty){
 		this.difficulty+=(questionDifficulty)*0.1f;
