@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import fr.nocturlab.entities.Account;
 import fr.nocturlab.entities.Question;
 import fr.nocturlab.entities.Resultat;
 
-@Repository
+@RepositoryRestResource
 public interface ResultatRepository extends CrudRepository<Resultat, Integer> {
 	List<Resultat> findByAccountOrderByCreationDate(Account account);
 	default List<Resultat> findByAccount(Account account){

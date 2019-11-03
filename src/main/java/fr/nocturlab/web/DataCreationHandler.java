@@ -1,12 +1,15 @@
-package fr.nocturlab.db;
+package fr.nocturlab.web;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import fr.nocturlab.entities.Answer;
 import fr.nocturlab.entities.Category;
@@ -20,9 +23,10 @@ import fr.nocturlab.repository.QuestionRepository;
 import fr.nocturlab.repository.ResourceRepository;
 import fr.nocturlab.repository.TypeResourceRepository;
 
-@SpringBootTest
-@DataJpaTest
-public class CreateRowsInDatabaseTest {
+@RestController
+public class DataCreationHandler {
+	@Value("${server.https}")
+	public boolean https;
 
 	@Autowired
 	CategoryRepository categoryRepository;
@@ -35,19 +39,19 @@ public class CreateRowsInDatabaseTest {
 	@Autowired
 	AnswerRepository answerRepository;
 
-	@Test
-	public void createCategoriesTest() {
+	@RequestMapping(value = { "/create-data" }, method = RequestMethod.GET)
+	public ResponseEntity<String> createData(
+		@RequestHeader(name = "Auth", defaultValue = "") String auth
+	)throws NotFoundException {
+
 		List<Category> categs = new ArrayList<Category>() {{
 			add(new Category("Qui travaille avec qui ?"));
 			add(new Category("Qui a écrit l'article ?"));
-			add(new Category("Qui travaille sur ce projet?"));
+			add(new Category("Qui travaille sur ce projet ?"));
 			add(new Category("Qui a fait quoi ?"));
 		}};
 		categoryRepository.saveAll(categs);
-	}
 
-	@Test
-	public void createTypeResourcesTest() throws NotFoundException {
 		List<TypeResource> types = new ArrayList<TypeResource>() {{
 			add(new TypeResource("Article"));
 			add(new TypeResource("Librairie"));
@@ -55,10 +59,6 @@ public class CreateRowsInDatabaseTest {
 			add(new TypeResource("Image"));
 		}};
 		typeResourceRepository.saveAll(types);
-	}
-
-	@Test
-	public void createQuestionsTest() throws NotFoundException {
 
 		List<Question> questions = new ArrayList<Question>() {{
 			add(new Question("Qui a participé à l'écriture de l'article ?",
@@ -90,7 +90,7 @@ public class CreateRowsInDatabaseTest {
 					add(new Answer("Damien Mondou"));
 				}}),
 				5,
-				categoryRepository.findByName("Qui travaille sur ce projet?").orElseThrow(()->new NotFoundException("Category with name 'Qui travaille sur ce projet ?' doesn't exist.")),
+				categoryRepository.findByName("Qui travaille sur ce projet ?").orElseThrow(()->new NotFoundException("Category with name 'Qui travaille sur ce projet ?' doesn't exist.")),
 				resourceRepository.save(new Resource("Librairie de manipulation des treillis", 
 					"Karell Bertet",
 					typeResourceRepository.findByName("Librairie").orElseThrow(()->new NotFoundException("TypeResource with name 'Librairie' doesn't exist.")),
@@ -133,7 +133,7 @@ public class CreateRowsInDatabaseTest {
 				4,
 				categoryRepository.findByName("Qui a fait quoi ?").orElseThrow(()->new NotFoundException("Category with name 'Qui a fait quoi ?' doesn't exist."))
 			));
-			add(new Question("Qui est impliqué dans les projets Art et sciences ?",
+			add(new Question("Qui a participé à l'écriture de l'article ?",
 				answerRepository.saveAll(new ArrayList<Answer>() {{
 					add(new Answer("Remy Mullot"));
 					add(new Answer("Alain Bouju"));
@@ -143,7 +143,7 @@ public class CreateRowsInDatabaseTest {
 					add(new Answer("Karell Bertet"));
 					add(new Answer("Damien Mondou"));
 				}}),
-				4,
+				1,
 				categoryRepository.findByName("Qui a écrit l'article ?").orElseThrow(()->new NotFoundException("Category with name 'Qui a écrit l'article ?' doesn't exist.")),
 				resourceRepository.save(new Resource("« Une approche ontologique pour la structuration de données spatio-temporelles de trajectoires : Application à l’étude des déplacements de mammifères marins », Revue Internationale de Géomatique - International Journal of Geomatics and Spatial Analysis , Hermes-Lavoisier, vol 22/1-2012, pp 55-75 ( francophone ) (selected paper SAGEO)",
 					null,
@@ -153,5 +153,7 @@ public class CreateRowsInDatabaseTest {
 		}};
 
 		questionRepository.saveAll(questions);
+
+		return ResponseEntity.ok("Datas was now created.");
 	}
 }

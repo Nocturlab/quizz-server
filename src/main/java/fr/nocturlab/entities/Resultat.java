@@ -31,7 +31,7 @@ public class Resultat {
     @OneToMany
     @JoinTable(name = "resultat_answer")
     private List<Answer> answers;
-    @Column(name = "creation_date", insertable = false, updatable = false)
+	@Column(name = "creation_date", updatable = false)
     private LocalDateTime creationDate;
     @Column(name = "duration", updatable = false)
     private Integer duration;

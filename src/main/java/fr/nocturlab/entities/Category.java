@@ -23,11 +23,12 @@ public class Category {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(insertable = false, updatable = false)
 	private Integer id;
+	@Column(unique = true)
 	@NotNull private String name;
 	private String description;
 	@OneToMany(mappedBy = "category")
 	private List<Question> questions;
-	@Column(name = "creation_date", insertable = false, updatable = false)
+	@Column(name = "creation_date", updatable = false)
 	private LocalDateTime creationDate;
 
 	public Category(){
@@ -43,12 +44,6 @@ public class Category {
 	public Category(String name, String description){
 		this(name);
 		this.description = description;
-	}
-
-	@Transient
-	public Category addQuestions(Question question) {
-		this.questions.add(question);
-		return this;
 	}
 
 	@Transient
