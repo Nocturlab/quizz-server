@@ -114,12 +114,14 @@ public class ApiHandler {
 		
 		List<Question> questions = questionRepository.findByNotAlreadyAnswer(a);
 		Question question = questions.get(rand.nextInt(questions.size()));
+		question.getAnswers(); // A laisser, sinon les réponses ne sont pas envoyés (Je ne sais pas pourquoi)
+		question.getResource();
 		return ResponseEntity.ok(question);
 	}
 
 	@RequestMapping(value = { "/questions/{questionId}/answer" }, method = RequestMethod.POST)
 	public ResponseEntity<?> postAnswer(@RequestHeader(name = "Auth", required = false) String auth,
-			HttpServletRequest request, 
+			HttpServletRequest request,
 			@PathVariable(name = "questionId", required = true) int questionId,
 			@RequestBody List<Integer> data
 	) throws NotFoundException {

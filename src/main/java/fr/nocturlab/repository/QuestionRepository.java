@@ -17,8 +17,4 @@ public interface QuestionRepository extends CrudRepository<Question, Integer> {
 
     @Query(value = "SELECT * FROM question q WHERE q.id not in (SELECT distinct r.question_id FROM resultat r WHERE r.account_id = :account)", nativeQuery = true)
     List<Question> findByNotAlreadyAnswer(@Param("account") Account account);
-
-    default Integer test(Integer i){
-        return i;
-    }
 }
