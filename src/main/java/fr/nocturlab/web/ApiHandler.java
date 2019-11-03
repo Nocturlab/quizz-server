@@ -53,6 +53,8 @@ public class ApiHandler {
 	@Value("${server.https}")
 	public boolean https;
 
+	private SecureRandom rand;
+
 	@RequestMapping(value = { "/login" }, method = RequestMethod.POST)
 	public ResponseEntity<Account> login(@RequestHeader(name = "Auth", defaultValue = "") String auth) {
 		String[] identifiants = accountManager.parseAuth(auth);
@@ -101,15 +103,17 @@ public class ApiHandler {
 	@RequestMapping(value = { "/question" }, method = RequestMethod.GET)
 	public ResponseEntity<?> getNextQuestion(@RequestHeader(name = "Auth", required = false) String auth,
 			HttpServletRequest request) throws NoSuchAlgorithmException {
+		if(rand == null)
+			rand = SecureRandom.getInstance("SHA1PRNG");
 		String[] identifiants = accountManager.parseAuth(auth);
 		if(identifiants.length == 0)
 			return ResponseEntity.badRequest().build();
 		Account a = accountManager.login(identifiants[0], identifiants[1]);
-		if (a == null) 
+		if (a == null)
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		
 		List<Question> questions = questionRepository.findByNotAlreadyAnswer(a);
-		Question question = questions.get(SecureRandom.getInstance("SHA1PRNG").nextInt(questions.size()));
+		Question question = questions.get(rand.nextInt(questions.size()));
 		return ResponseEntity.ok(question);
 	}
 

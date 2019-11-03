@@ -133,7 +133,7 @@ public class DataCreationHandler {
 				4,
 				categoryRepository.findByName("Qui a fait quoi ?").orElseThrow(()->new NotFoundException("Category with name 'Qui a fait quoi ?' doesn't exist."))
 			));
-			add(new Question("Qui est impliqué dans les projets Art et sciences ?",
+			add(new Question("Qui a participé à l'écriture de l'article ?",
 				answerRepository.saveAll(new ArrayList<Answer>() {{
 					add(new Answer("Remy Mullot"));
 					add(new Answer("Alain Bouju"));
@@ -143,7 +143,7 @@ public class DataCreationHandler {
 					add(new Answer("Karell Bertet"));
 					add(new Answer("Damien Mondou"));
 				}}),
-				4,
+				1,
 				categoryRepository.findByName("Qui a écrit l'article ?").orElseThrow(()->new NotFoundException("Category with name 'Qui a écrit l'article ?' doesn't exist.")),
 				resourceRepository.save(new Resource("« Une approche ontologique pour la structuration de données spatio-temporelles de trajectoires : Application à l’étude des déplacements de mammifères marins », Revue Internationale de Géomatique - International Journal of Geomatics and Spatial Analysis , Hermes-Lavoisier, vol 22/1-2012, pp 55-75 ( francophone ) (selected paper SAGEO)",
 					null,
