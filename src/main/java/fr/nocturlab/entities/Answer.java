@@ -19,9 +19,9 @@ public class Answer {
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(insertable = false, updatable = false)
-	private Integer id;
+    private Integer id;
     private String value;
-    @Column(name = "creation_date", insertable = false, updatable = false)
+	@Column(name = "creation_date", updatable = false)
     private LocalDateTime creationDate;
 
     public Answer() {

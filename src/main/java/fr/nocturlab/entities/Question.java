@@ -3,6 +3,8 @@ package fr.nocturlab.entities;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,11 +36,11 @@ public class Question {
 	@ManyToOne
 	private Resource resource;
 	@ManyToOne
-	private Category category;
+	@NotNull private Category category;
 	@ManyToMany
 	@JsonIgnore
 	@NotNull private List<Answer> validAnswer;
-	@Column(name = "creation_date", insertable = false, updatable = false)
+	@Column(name = "creation_date", updatable = false)
 	private LocalDateTime creationDate;
 
 	public Question(){
@@ -47,42 +49,40 @@ public class Question {
 		this.validAnswer = new ArrayList<>();
 		this.creationDate = LocalDateTime.now();
 	}
-	private Question(String value, List<Answer> answers){
+	private Question(String value, Iterable<Answer> answers){
 		this();
 		this.value = value;
-		this.answers = answers;
+		this.answers = StreamSupport.stream(answers.spliterator(), false).collect(Collectors.toList());
 	}
-	public Question(String value, List<Answer> answers, List<Integer> validAnswer){
+	public Question(String value, Iterable<Answer> answers, List<Integer> validAnswer){
 		this(value, answers);
 		validAnswer.forEach((Integer answer)->{
 			this.validAnswer.add(this.answers.get(answer));
 		});
-
 	}
-	public Question(String value, List<Answer> answers, Integer validAnswer){
+	public Question(String value, Iterable<Answer> answers, Integer validAnswer){
 		this(value, answers);
 		this.validAnswer.add(this.answers.get(validAnswer));
 	}
 
-	public Question(String value, List<Answer> answers, List<Integer> validAnswer, Category categ){
+	public Question(String value, Iterable<Answer> answers, List<Integer> validAnswer, Category categ){
 		this(value, answers, validAnswer);
 		this.category = categ;
-		categ.addQuestions(this);
 	}
-	public Question(String value, List<Answer> answers, Integer validAnswer, Category categ){
+	public Question(String value, Iterable<Answer> answers, Integer validAnswer, Category categ){
 		this(value, answers, validAnswer);
-		categ.addQuestions(this);
+		this.category = categ;
 	}
 	
-	public Question(String value, List<Answer> answers, List<Integer> validAnswer, Category categ, Resource resource){
+	public Question(String value, Iterable<Answer> answers, List<Integer> validAnswer, Category categ, Resource resource){
 		this(value, answers, validAnswer, categ);
 		this.resource = resource;
 	}
-	public Question(String value, List<Answer> answers, Integer validAnswer, Category categ, Resource resource){
+	public Question(String value, Iterable<Answer> answers, Integer validAnswer, Category categ, Resource resource){
 		this(value, answers, validAnswer, categ);
 		this.resource = resource;
 	}
-
+	
 	@Transient
 	public void incDifficulty(Float accountDifficulty){
 		this.difficulty+=(accountDifficulty)*0.1f;

@@ -21,13 +21,16 @@ public class Resource {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(insertable = false, updatable = false)
 	private Integer id;
+	@Column(unique = true, length=1000)
 	@NotNull private String name;
 	@ManyToOne
 	@NotNull private TypeResource type;
+	@Column(columnDefinition = "text")
 	private String content;
+	@Column(columnDefinition = "text")
 	private String summary;
 	private String author;
-	@Column(name = "creation_date", insertable = false, updatable = false)
+	@Column(name = "creation_date", updatable = false)
 	private LocalDateTime creationDate;
 
 	public Resource(){}

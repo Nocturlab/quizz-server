@@ -31,7 +31,7 @@ public class AccountManager {
 			return null;
 		}
 		Account a = accountRepository.getByPseudoAndPass(pseudo.toLowerCase().trim(), encryptPassword(pass));
-		if (a != null) {
+		if (a == null) {
 			log.info("Connexion avec mot de passe ou Login incorrect.");
 			return null;
 		}
@@ -42,7 +42,7 @@ public class AccountManager {
 		return resultatRepository.findByAccount(account);
 	}
 
-	public byte[] encryptPassword(String value) {
+	public static byte[] encryptPassword(String value) {
 		byte[] ret;
 		try {
 			// génération de la clé secrète pour HMAC
@@ -61,6 +61,8 @@ public class AccountManager {
 	}
 
 	public String[] parseAuth(String auth) {
+		if(auth == null)
+			return new String[0];
 		return auth.split(":");
 	}
 
