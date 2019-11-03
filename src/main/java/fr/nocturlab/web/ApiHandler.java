@@ -114,8 +114,8 @@ public class ApiHandler {
 		
 		List<Question> questions = questionRepository.findByNotAlreadyAnswer(a);
 		Question question = questions.get(rand.nextInt(questions.size()));
-		question.getAnswers(); // A laisser, sinon les réponses ne sont pas envoyés (Je ne sais pas pourquoi)
-		question.getResource();
+		System.out.println(question.getAnswers());  // A laisser, sinon les réponses ne sont pas envoyés (Je ne sais pas pourquoi)
+		System.out.println(question.getResource());
 		return ResponseEntity.ok(question);
 	}
 
@@ -123,7 +123,7 @@ public class ApiHandler {
 	public ResponseEntity<?> postAnswer(@RequestHeader(name = "Auth", required = false) String auth,
 			HttpServletRequest request,
 			@PathVariable(name = "questionId", required = true) int questionId,
-			@RequestBody List<Integer> data
+			@RequestBody List<String> data
 	) throws NotFoundException {
 		String[] identifiants = accountManager.parseAuth(auth);
 		if(identifiants.length == 0)
@@ -132,17 +132,18 @@ public class ApiHandler {
 		if (a == null) 
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		
+		Question question = questionRepository.findById(questionId).orElseThrow(()->new NotFoundException("Question with id: "+questionId+ " doesn't exist."));
+
 		ArrayList<Answer> answers = new ArrayList<>();
 		boolean isFirst = true;
 		int duration = -1;
-		for (Integer answer : data) {
+		for (String answer : data) {
 			if(isFirst){ // first is duration in second
 				isFirst = false;
-				duration = answer;
+				duration = Integer.parseInt(answer);
 			}else
-				answers.add(answerRepository.findById(answer).orElseThrow(()->new NotFoundException("Answer with id: "+answer+ " doesn't exist.")));
+				answers.add(answerRepository.getByValueAndQuestionId(answer, question.getId()).orElseThrow(()->new NotFoundException("Answer with id: "+answer+ " doesn't exist.")));
 		}
-		Question question = questionRepository.findById(questionId).orElseThrow(()->new NotFoundException("Question with id: "+questionId+ " doesn't exist."));
 		
 		Resultat resultat = new Resultat(a, question, answers, duration);
 		resultatRepository.save(resultat);
