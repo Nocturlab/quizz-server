@@ -60,17 +60,20 @@ public class DataCreationHandler {
 		}};
 		typeResourceRepository.saveAll(types);
 
+		ArrayList<Answer> answers = new ArrayList<Answer>() {{
+			add(new Answer("Remy Mullot"));
+			add(new Answer("Alain Bouju"));
+			add(new Answer("Patrick Franco"));
+			add(new Answer("Armelle Prigent"));
+			add(new Answer("Arnaud Revel"));
+			add(new Answer("Karell Bertet"));
+			add(new Answer("Damien Mondou"));
+		}};
+		
+		answerRepository.saveAll(answers);
 		List<Question> questions = new ArrayList<Question>() {{
 			add(new Question("Qui a participé à l'écriture de l'article ?",
-				answerRepository.saveAll(new ArrayList<Answer>() {{
-					add(new Answer("Remy Mullot"));
-					add(new Answer("Alain Bouju"));
-					add(new Answer("Patrick Franco"));
-					add(new Answer("Armelle Prigent"));
-					add(new Answer("Arnaud Revel"));
-					add(new Answer("Karell Bertet"));
-					add(new Answer("Damien Mondou"));
-				}}),
+				answers,
 				0 /* 0 is the first answer in the list setted before */,
 				categoryRepository.findByName("Qui a écrit l'article ?").orElseThrow(()->new NotFoundException("Category with name 'Qui a écrit l'article ?' doesn't exist.")),
 				resourceRepository.save(new Resource("Analyse d’Images de Documents Anciens : une Approche Texture, revue Traitement du signal, Volume 24, N° 6, 2007", 
@@ -80,15 +83,7 @@ public class DataCreationHandler {
 				))
 			));
 			add(new Question("Qui développe la librairie de manipulation des treillis ?",
-				answerRepository.saveAll(new ArrayList<Answer>() {{
-					add(new Answer("Remy Mullot"));
-					add(new Answer("Alain Bouju"));
-					add(new Answer("Patrick Franco"));
-					add(new Answer("Armelle Prigent"));
-					add(new Answer("Arnaud Revel"));
-					add(new Answer("Karell Bertet"));
-					add(new Answer("Damien Mondou"));
-				}}),
+				answers,
 				5,
 				categoryRepository.findByName("Qui travaille sur ce projet ?").orElseThrow(()->new NotFoundException("Category with name 'Qui travaille sur ce projet ?' doesn't exist.")),
 				resourceRepository.save(new Resource("Librairie de manipulation des treillis", 
@@ -104,15 +99,7 @@ public class DataCreationHandler {
 				))
 			));
 			add(new Question("Qui sont les directeurs de thèse de Damien Mondou ?",
-				 answerRepository.saveAll(new ArrayList<Answer>() {{
-					add(new Answer("Remy Mullot"));
-					add(new Answer("Alain Bouju"));
-					add(new Answer("Patrick Franco"));
-					add(new Answer("Armelle Prigent"));
-					add(new Answer("Arnaud Revel"));
-					add(new Answer("Karell Bertet"));
-					add(new Answer("Damien Mondou"));
-				}}),
+				answers,
 				new ArrayList<Integer>() {{
 					add(3);
 					add(4);
@@ -121,28 +108,12 @@ public class DataCreationHandler {
 				resourceRepository.save(new Resource("Damien Mondou", null, typeResourceRepository.findByName("Personne").orElseThrow(()->new NotFoundException("TypeResource with name 'Personne' doesn't exist."))))
 			));
 			add(new Question("Qui est impliqué dans les projets Art et sciences ?",
-				answerRepository.saveAll(new ArrayList<Answer>() {{
-					add(new Answer("Remy Mullot"));
-					add(new Answer("Alain Bouju"));
-					add(new Answer("Patrick Franco"));
-					add(new Answer("Armelle Prigent"));
-					add(new Answer("Arnaud Revel"));
-					add(new Answer("Karell Bertet"));
-					add(new Answer("Damien Mondou"));
-				}}),
+				answers,
 				4,
 				categoryRepository.findByName("Qui a fait quoi ?").orElseThrow(()->new NotFoundException("Category with name 'Qui a fait quoi ?' doesn't exist."))
 			));
 			add(new Question("Qui a participé à l'écriture de l'article ?",
-				answerRepository.saveAll(new ArrayList<Answer>() {{
-					add(new Answer("Remy Mullot"));
-					add(new Answer("Alain Bouju"));
-					add(new Answer("Patrick Franco"));
-					add(new Answer("Armelle Prigent"));
-					add(new Answer("Arnaud Revel"));
-					add(new Answer("Karell Bertet"));
-					add(new Answer("Damien Mondou"));
-				}}),
+				answers,
 				1,
 				categoryRepository.findByName("Qui a écrit l'article ?").orElseThrow(()->new NotFoundException("Category with name 'Qui a écrit l'article ?' doesn't exist.")),
 				resourceRepository.save(new Resource("« Une approche ontologique pour la structuration de données spatio-temporelles de trajectoires : Application à l’étude des déplacements de mammifères marins », Revue Internationale de Géomatique - International Journal of Geomatics and Spatial Analysis , Hermes-Lavoisier, vol 22/1-2012, pp 55-75 ( francophone ) (selected paper SAGEO)",
