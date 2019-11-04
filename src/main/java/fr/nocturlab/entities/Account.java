@@ -9,9 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import fr.nocturlab.manager.AccountManager;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,20 +21,54 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Account {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(insertable = false, updatable = false)
 	private Integer id;
+	@Column(unique = true)
 	private String pseudo;
+	@Column(unique = true)
 	private String email;
 	private Float difficulty;
-	@Column(insertable = false, updatable = false)
+	@Column(unique = true)
 	@JsonIgnore
 	private UUID token;
 	@JsonIgnore
 	private byte[] pass;
-	@Column(name = "creation_date", insertable = false, updatable = false)
+	@NotNull private boolean isAdmin;
+	@Column(name = "creation_date", updatable = false)
 	private LocalDateTime creationDate;
+
+	public Account(){
+		this.difficulty = 1f;
+		this.token = UUID.randomUUID();
+		this.creationDate = LocalDateTime.now();
+	}
+	public Account(String pseudo) {
+		this();
+		this.pseudo = pseudo;
+	}
+	public Account(String pseudo, String email) {
+		this(pseudo);
+		this.email = email;
+	}
+	public Account(String pseudo, String email, byte[] pass) {
+		this(pseudo, email);
+		this.pass = pass;
+	}
+	public Account(String pseudo, String email, byte[] pass, boolean isAdmin) {
+		this(pseudo, email, pass);
+		this.isAdmin = isAdmin;
+	}
+	
+	public void setPass(byte[] pass){
+		this.pass = pass;
+	}
+
+	public void setPass(String pass) {
+		this.pass = AccountManager.encryptPassword(pass);
+	}
 
 	@Transient
 	public void incDifficulty(Float questionDifficulty){
@@ -41,5 +77,11 @@ public class Account {
 	@Transient
 	public void decDifficulty(Float questionDifficulty){
 		this.difficulty-=(questionDifficulty)*0.1f;
+	}
+
+	@Transient
+	@Override
+	public String toString() {
+		return this.pseudo;
 	}
 }

@@ -30,9 +30,10 @@ targetCompatibility = 1.8
 dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-rest'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper'
-    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate5'
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate5'
     implementation group: 'javax.servlet', name: 'jstl', version: 'latest.release'
     implementation group: 'taglibs', name: 'standard', version: 'latest.release'
@@ -44,22 +45,7 @@ dependencies {
 //    implementation group: 'org.freemarker', name: 'freemarker', version: '2.3.28'
     compileOnly group: 'org.projectlombok', name: 'lombok', version: 'latest.release'
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: 'latest.release'
-    testImplementation group:'junit', name: 'junit', version: '4.12'
+    testImplementation group:'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.3.1'
+    testRuntimeOnly group:'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.3.1'
 }
 
-task showCoverage {
-    dependsOn jacocoTestReport
-    String coverage
-    doFirst {
-        def report = file("${buildDir}/reports/jacoco/test/html/index.html")
-        coverage = report.text
-        // appliquer la regex avec un replace
-        coverage = coverage.replaceFirst('^.*<tfoot>((?!ctr2).)+ctr2"[^>]*>[^0-9]?([0-9]+)[^0-9]?%<.*$', '$2').trim();
-    }
-    doLast {
-        // afficher le résultat
-        println "Coverage: ${coverage}%"
-    }
-}
-
-test.finalizedBy showCoverage

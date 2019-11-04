@@ -5,23 +5,24 @@ server:
     enabled: true
   cors:
     origins: ${CORS_ORIGINS:*}
-app:
-  version:
-    commit: ${COMMIT:0}
 spring:
   mvc:
     view:
       prefix: /WEB-INF/jsp/
       suffix: .jsp
+  data:
+    rest:
+      base-path: /api/v1
   # DATABASE
-  datasource: # docker run -it --rm --name postgres -p 5432:5432 -e POSTGRES_DB=quizz -e POSTGRES_PASSWORD=quizz postgres
+  datasource: # docker run -it --rm --name postgres -p 5432:5432 -e POSTGRES_DB=quizz -e POSTGRES_PASSWORD=wQ9b0cIsls65 postgres
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${PG_HOST:localhost}:${PG_PORT:5432}/${PG_DATABASE:postgres}
-    username: ${PG_LOGIN:postgres}
-    password: ${PG_PASS:postgres}
+    url: jdbc:postgresql://${PG_HOST:db.nocturlab.fr}:${PG_PORT:5432}/${PG_DATABASE:quizz}
+    username: ${PG_LOGIN:quizz}
+    password: ${PG_PASS:wQ9b0cIsls65}
   # JPA / HIBERNATE
   jpa:
     show-sql: false
+    generate-ddl: true
     hibernate:
       ddl-auto: update
       id:
@@ -35,10 +36,6 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
-  # Flyway
-  flyway:
-    locations: classpath:db
-    baseline-on-migrate: true
   jackson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
