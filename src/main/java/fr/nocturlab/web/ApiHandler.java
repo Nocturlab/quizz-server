@@ -122,7 +122,7 @@ public class ApiHandler {
 	@RequestMapping(value = { "/questions/{questionId}/answer" }, method = RequestMethod.POST)
 	public ResponseEntity<?> postAnswer(@RequestHeader(name = "Auth", required = false) String auth,
 			HttpServletRequest request,
-			@PathVariable(name = "questionId", required = true) int questionId,
+			@PathVariable(name = "questionId", required = true) Integer questionId,
 			@RequestBody List<String> data
 	) throws NotFoundException {
 		String[] identifiants = accountManager.parseAuth(auth);
@@ -156,6 +156,8 @@ public class ApiHandler {
 			a.decDifficulty(question.getDifficulty());
 			question.decDifficulty(a.getDifficulty());
 		}
+		accountRepository.save(a);
+		questionRepository.save(question);
 
 		return ResponseEntity.ok(isCorrect);
 	}
