@@ -52,7 +52,7 @@ public class Question {
 	private Question(String value, Iterable<Answer> answers){
 		this();
 		this.value = value;
-		this.answers = StreamSupport.stream(answers.spliterator(), false).collect(Collectors.toList());
+		this.answers = (ArrayList<Answer>)answers;
 	}
 	public Question(String value, Iterable<Answer> answers, List<Integer> validAnswer){
 		this(value, answers);

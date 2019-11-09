@@ -42,16 +42,16 @@ public class State {
 	public State(String name) {
 		this.name = name;
 	}
-	public State(String name, String low, Integer medium, Integer high) {
-		this(pseudo);
+	public State(String name, Integer low, Integer medium, Integer high) {
+		this(name);
 		this.low = low;
 		this.medium = medium;
 		this.high = high;
 		this.each = 1;
 	}
 	
-	public State(String name, String low, Integer medium, Integer high, Integer each) {
-		this(pseudo, low, medium, high);
+	public State(String name, Integer low, Integer medium, Integer high, Integer each) {
+		this(name, low, medium, high);
 		this.each = each;
 	}
 
