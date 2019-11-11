@@ -17,6 +17,6 @@ public interface QuestionRepository extends CrudRepository<Question, Integer> {
     Integer countByNotAlreadyAnswer(@Param("account") Account account);
 
     // get the 5 question that was closest of the difficulty of the player
-    @Query(value = "SELECT * FROM question q WHERE q.id IN (SELECT q.id FROM question q WHERE q.id not in (SELECT distinct r.question_id FROM resultat r WHERE r.account_id = 1) ORDER BY abs(q.difficulty - (SELECT difficulty FROM account WHERE id=1)) LIMIT 10)", nativeQuery = true)
+    @Query(value = "SELECT * FROM question q WHERE q.id IN (SELECT q.id FROM question q WHERE q.id not in (SELECT distinct r.question_id FROM resultat r WHERE r.account_id = :account) ORDER BY abs(q.difficulty - (SELECT difficulty FROM account WHERE id=:account)) LIMIT 10)", nativeQuery = true)
     List<Question> findByNotAlreadyAnswer(@Param("account") Account account);
 }
