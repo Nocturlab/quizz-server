@@ -3,8 +3,6 @@ package fr.nocturlab.entities;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,7 +29,7 @@ public class Question {
 	private Integer id;
 	@NotNull private String value;
 	@NotNull private Float difficulty;
-	@OneToMany
+	@ManyToMany
 	private List<Answer> answers;
 	@ManyToOne
 	private Resource resource;
@@ -39,30 +37,36 @@ public class Question {
 	@NotNull private Category category;
 	@ManyToMany
 	@JsonIgnore
-	@NotNull private List<Answer> validAnswer;
+	@NotNull private List<Answer> validAnswers;
+	
+	@OneToMany(mappedBy = "question")
+	@JsonIgnore
+	private List<Resultat> userAnswers;
+
 	@Column(name = "creation_date", updatable = false)
 	private LocalDateTime creationDate;
 
 	public Question(){
 		this.difficulty = 1f;
 		this.answers = new ArrayList<>();
-		this.validAnswer = new ArrayList<>();
+		this.validAnswers = new ArrayList<>();
+		this.userAnswers = new ArrayList<>();
 		this.creationDate = LocalDateTime.now();
 	}
 	private Question(String value, Iterable<Answer> answers){
 		this();
 		this.value = value;
-		this.answers = StreamSupport.stream(answers.spliterator(), false).collect(Collectors.toList());
+		this.answers = (ArrayList<Answer>)answers;
 	}
 	public Question(String value, Iterable<Answer> answers, List<Integer> validAnswer){
 		this(value, answers);
 		validAnswer.forEach((Integer answer)->{
-			this.validAnswer.add(this.answers.get(answer));
+			this.validAnswers.add(this.answers.get(answer));
 		});
 	}
 	public Question(String value, Iterable<Answer> answers, Integer validAnswer){
 		this(value, answers);
-		this.validAnswer.add(this.answers.get(validAnswer));
+		this.validAnswers.add(this.answers.get(validAnswer));
 	}
 
 	public Question(String value, Iterable<Answer> answers, List<Integer> validAnswer, Category categ){
