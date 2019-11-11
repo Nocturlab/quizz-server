@@ -9,8 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import lombok.Getter;
@@ -28,7 +28,7 @@ public class Resultat {
     private Account account;
     @ManyToOne
     private Question question;
-    @OneToMany
+    @ManyToMany
     @JoinTable(name = "resultat_answer")
     private List<Answer> answers;
 	@Column(name = "creation_date", updatable = false)
