@@ -35,7 +35,12 @@ public class Answer {
     @Transient
     @Override
     public boolean equals(Object obj) {
-        return obj.equals(this.value);
+        if(obj instanceof String)
+            return obj.equals(this.value);
+        else if(obj instanceof Answer)
+            return ((Answer)obj).value.equals(this.value);
+        else 
+            return obj.equals(this);
     }
 
     @Transient

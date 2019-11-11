@@ -142,7 +142,7 @@ public class ApiHandler {
 				isFirst = false;
 				duration = Integer.parseInt(answer);
 			}else
-				answers.add(answerRepository.getByValueAndQuestionId(answer, question.getId()).orElseThrow(()->new NotFoundException("Answer with id: "+answer+ " doesn't exist.")));
+				answers.add(answerRepository.getByValueAndQuestionId(answer, question.getId()).orElseThrow(()->new NotFoundException("Answer: '"+answer+ "' is not correct for question: "+ question.getId())));
 		}
 		
 		Resultat resultat = new Resultat(a, question, answers, duration);
