@@ -67,7 +67,7 @@ public class ApiHandler {
 		// Pseudo Password
 		Account a = accountManager.login(identifiants[0], identifiants[1]);
 		
-		State loginBadge = stateRepository.findByName('Hyper-actif').orElseThrow(()->new NotFoundException("State with name 'Hyper-Actif' doesn't exist.")),
+		State loginBadge = stateRepository.findByName("Hyper-actif").orElseThrow(()->new NotFoundException("State with name 'Hyper-Actif' doesn't exist.")),
 		
 		Map<State, Float> states = a.getStates();
 		
@@ -131,7 +131,7 @@ public class ApiHandler {
 		System.out.println(question.getAnswers());  // A laisser, sinon les réponses ne sont pas envoyés (Je ne sais pas pourquoi)
 		System.out.println(question.getResource());
 		
-		State skipQuestionBadge = stateRepository.findByName('Cheater').orElseThrow(()->new NotFoundException("State with name 'Hyper-Actif' doesn't exist.")),
+		State skipQuestionBadge = stateRepository.findByName("Cheater").orElseThrow(()->new NotFoundException("State with name 'Hyper-Actif' doesn't exist.")),
 		
 		Map<State, Float> states = a.getStates();
 		
@@ -184,18 +184,18 @@ public class ApiHandler {
 
 		/* Définition des badges */		
 		Map<State, Float> states = a.getStates();
-		State skipQuestionBadge = stateRepository.findByName('Cheater').orElseThrow(()->new NotFoundException("State with name 'Cheater' doesn't exist.")),
+		State skipQuestionBadge = stateRepository.findByName("Cheater").orElseThrow(()->new NotFoundException("State with name 'Cheater' doesn't exist.")),
 		if(states.hasKey(skipQuestionBadge))
 			states.set(skipQuestionBadge, states.get(skipQuestionBadge)-1);
 		
 		if(duration < 60){
-			State quickAnswerBadge = stateRepository.findByName('Rapide').orElseThrow(()->new NotFoundException("State with name 'Cheater' doesn't exist.")),
+			State quickAnswerBadge = stateRepository.findByName("Rapide").orElseThrow(()->new NotFoundException("State with name 'Cheater' doesn't exist.")),
 			if(!states.hasKey(quickAnswerBadge))
 				states.set(quickAnswerBadge, 0);
 			states.set(quickAnswerBadge, states.get(quickAnswerBadge)+1);
 		}
 		
-		State nbAnswerBadge = stateRepository.findByName('Intéressé').orElseThrow(()->new NotFoundException("State with name 'Intéressé' doesn't exist.")),
+		State nbAnswerBadge = stateRepository.findByName("Intéressé").orElseThrow(()->new NotFoundException("State with name 'Intéressé' doesn't exist.")),
 		if(states.hasKey(nbAnswerBadge))
 			states.set(nbAnswerBadge, 0);
 		states.set(nbAnswerBadge, states.get(nbAnswerBadge)+1);
