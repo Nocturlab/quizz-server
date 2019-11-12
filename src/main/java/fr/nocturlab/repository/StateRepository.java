@@ -11,5 +11,5 @@ import fr.nocturlab.entities.State;
 
 @RepositoryRestResource
 public interface StateRepository extends CrudRepository<State, Integer> {
-
+  public Optional<State> findByName(String name);
 }
