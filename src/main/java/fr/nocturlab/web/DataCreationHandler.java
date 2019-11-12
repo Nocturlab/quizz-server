@@ -38,12 +38,21 @@ public class DataCreationHandler {
 	ResourceRepository resourceRepository;
 	@Autowired
 	AnswerRepository answerRepository;
+	@Autowired
+	StateRepository stateRepository;
 
 	@RequestMapping(value = { "/create-data" }, method = RequestMethod.GET)
 	public ResponseEntity<String> createData(
 		@RequestHeader(name = "Auth", defaultValue = "") String auth
 	)throws NotFoundException {
-
+		Iterable<State> localStates = new ArrayList<State>() {{
+			add(new State("Hyper-actif", 10, 30, 50));
+			add(new State("Rapide", 2, 5, 10));
+			add(new State("Cheater", 2, 5, 10));
+			add(new State("Intéressé", 2, 5, 10));
+		}};
+		stateRepository.saveAll(localStates);
+		
 		Iterable<Category> localCategs = new ArrayList<Category>() {{
 			add(new Category("Qui travaille avec qui ?"));
 			add(new Category("Qui a écrit l'article ?"));

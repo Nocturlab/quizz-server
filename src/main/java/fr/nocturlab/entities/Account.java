@@ -14,6 +14,8 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import fr.nocturlab.manager.AccountManager;
+import fr.nocturlab.entities.State;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +23,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Account {
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(insertable = false, updatable = false)
@@ -39,11 +41,15 @@ public class Account {
 	@NotNull private boolean isAdmin;
 	@Column(name = "creation_date", updatable = false)
 	private LocalDateTime creationDate;
+	
+	@ManyToMany
+	private Map<State, Float> states;
 
 	public Account(){
 		this.difficulty = 1f;
 		this.token = UUID.randomUUID();
 		this.creationDate = LocalDateTime.now();
+		this.state = new HashMap<State, Float>();
 	}
 	public Account(String pseudo) {
 		this();

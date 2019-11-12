@@ -25,12 +25,14 @@ import fr.nocturlab.entities.Account;
 import fr.nocturlab.entities.Answer;
 import fr.nocturlab.entities.Question;
 import fr.nocturlab.entities.Resultat;
+import fr.nocturlab.entities.State;
 import fr.nocturlab.exception.NotFoundException;
 import fr.nocturlab.manager.AccountManager;
 import fr.nocturlab.repository.AccountRepository;
 import fr.nocturlab.repository.AnswerRepository;
 import fr.nocturlab.repository.QuestionRepository;
 import fr.nocturlab.repository.ResultatRepository;
+import fr.nocturlab.repository.StateRepository;
 import fr.nocturlab.utils.MappingUtil;
 
 @Controller
@@ -49,6 +51,8 @@ public class ApiHandler {
 	private AccountRepository accountRepository;
 	@Autowired
 	private AnswerRepository answerRepository;
+	@Autowired
+	private StateRepository stateRepository;
 
 	@Value("${server.https}")
 	public boolean https;
@@ -62,6 +66,16 @@ public class ApiHandler {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		// Pseudo Password
 		Account a = accountManager.login(identifiants[0], identifiants[1]);
+		
+		State loginBadge = stateRepository.findByName("Hyper-actif").orElseThrow(()->new NotFoundException("State with name 'Hyper-Actif' doesn't exist."));
+		
+		Map<State, Float> states = a.getStates();
+		
+		if(!states.hasKey(loginBadge))
+			states.set(loginBadge, 0);
+		states.set(loginBadge, states.get(loginBadge)+1);
+		
+		accountRepository.save(a);
 		
 		if (a == null)
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -116,6 +130,17 @@ public class ApiHandler {
 		Question question = questions.get(rand.nextInt(questions.size()));
 		System.out.println(question.getAnswers());  // A laisser, sinon les réponses ne sont pas envoyés (Je ne sais pas pourquoi)
 		System.out.println(question.getResource());
+		
+		State skipQuestionBadge = stateRepository.findByName("Cheater").orElseThrow(()->new NotFoundException("State with name 'Hyper-Actif' doesn't exist."));
+		
+		Map<State, Float> states = a.getStates();
+		
+		if(!states.hasKey(skipQuestionBadge))
+			states.set(skipQuestionBadge, 0);
+		states.set(states.get(skipQuestionBadge)+1);
+		
+		accountRepository.save(a);
+		
 		return ResponseEntity.ok(question);
 	}
 
@@ -156,7 +181,28 @@ public class ApiHandler {
 			a.decDifficulty(question.getDifficulty());
 			question.decDifficulty(a.getDifficulty());
 		}
+
+		/* Définition des badges */		
+		Map<State, Float> states = a.getStates();
+		State skipQuestionBadge = stateRepository.findByName("Cheater").orElseThrow(()->new NotFoundException("State with name 'Cheater' doesn't exist."));
+		if(states.hasKey(skipQuestionBadge))
+			states.set(skipQuestionBadge, states.get(skipQuestionBadge)-1);
+		
+		if(duration < 60){
+			State quickAnswerBadge = stateRepository.findByName("Rapide").orElseThrow(()->new NotFoundException("State with name 'Cheater' doesn't exist."));
+			if(!states.hasKey(quickAnswerBadge))
+				states.set(quickAnswerBadge, 0);
+			states.set(quickAnswerBadge, states.get(quickAnswerBadge)+1);
+		}
+		
+		State nbAnswerBadge = stateRepository.findByName("Intéressé").orElseThrow(()->new NotFoundException("State with name 'Intéressé' doesn't exist."));
+		if(states.hasKey(nbAnswerBadge))
+			states.set(nbAnswerBadge, 0);
+		states.set(nbAnswerBadge, states.get(nbAnswerBadge)+1);
+		
 		accountRepository.save(a);
+		/* Fin des badges */
+		
 		questionRepository.save(question);
 
 		return ResponseEntity.ok(isCorrect);
