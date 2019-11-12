@@ -30,9 +30,9 @@ public class State {
 	private String name;
 
 	// Value for each level of a state
-	private Integer low;
-	private Integer medium;
-	private Integer high;
+	private Float low;
+	private Float medium;
+	private Float high;
 
 	// each is for example : 1 times each 5 minutes
 	private Integer each;
@@ -42,7 +42,7 @@ public class State {
 	public State(String name) {
 		this.name = name;
 	}
-	public State(String name, Integer low, Integer medium, Integer high) {
+	public State(String name, Float low, Float medium, Float high) {
 		this(name);
 		this.low = low;
 		this.medium = medium;
@@ -50,7 +50,7 @@ public class State {
 		this.each = 1;
 	}
 	
-	public State(String name, Integer low, Integer medium, Integer high, Integer each) {
+	public State(String name, Float low, Float medium, Float high, Integer each) {
 		this(name, low, medium, high);
 		this.each = each;
 	}

@@ -21,7 +21,6 @@ public class Answer {
 	@Column(insertable = false, updatable = false)
     private Integer id;
     private String value;
-
 	@Column(name = "creation_date", updatable = false)
     private LocalDateTime creationDate;
 
