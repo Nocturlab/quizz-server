@@ -28,11 +28,12 @@ public class State {
 	private Integer id;
 	@Column(unique = true)
 	private String name;
+	private Float value;
 
 	// Value for each level of a state
-	private Integer low;
-	private Integer medium;
-	private Integer high;
+	private Float low;
+	private Float medium;
+	private Float high;
 
 	// each is for example : 1 times each 5 minutes
 	private Integer each;
