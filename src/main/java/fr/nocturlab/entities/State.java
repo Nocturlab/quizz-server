@@ -28,7 +28,6 @@ public class State {
 	private Integer id;
 	@Column(unique = true)
 	private String name;
-	private Float value;
 
 	// Value for each level of a state
 	private Float low;
