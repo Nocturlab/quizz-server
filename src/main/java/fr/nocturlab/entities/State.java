@@ -51,7 +51,7 @@ public class State {
 		this.each = 1;
 	}
 	
-	public State(String name, Float low, Float medium, Float high, Float each) {
+	public State(String name, Float low, Float medium, Float high, Integer each) {
 		this(name, low, medium, high);
 		this.each = each;
 	}
